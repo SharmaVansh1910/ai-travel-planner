@@ -1,20 +1,18 @@
+
 from dotenv import load_dotenv
-from typing import TypedDict
+import streamlit as st
 from agents.state import TravelState
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
 
-# Load environment variables
 load_dotenv()
 
-
-
-
-# Gemini model
-llm = ChatGoogleGenerativeAI(
-    model="gemini-3.5-flash-lite",
-    temperature=0.3
+llm = ChatGroq(
+    model="openai/gpt-oss-120b",
+    temperature=0.3,
+    api_key=st.secrets["GROQ_API_KEY"]
 )
+
 
 def budget_agent(state: TravelState) -> dict:
     system_prompt = """
@@ -24,19 +22,19 @@ def budget_agent(state: TravelState) -> dict:
     - Create a budget breakdown for the itinerary
     - Ensure the itinerary is feasible within the given days and budget
     - Keep the response concise and actionable
-    -give costs in Indian Rupees since you're in India as we r making a travel agent for indian people who want to travel to other states of india or to other so indian pepople need cost in indian rupees to undertand the costs.
-    - Format the response as a bulleted list with the following categories:
-    🏠 Accommodation
-    🍜 Food
-    🚗 Transport
-    🎯 Activities
-    🛍️ Shopping/Miscellaneous
-    💰 Total Estimated cost
-    
+    - Give costs in Indian Rupees (INR)
+    - Format the response as a bulleted list with:
+      Accommodation
+      Food
+      Transport
+      Activities
+      Shopping/Miscellaneous
+      Total Estimated Cost
+
     Also include:
-- Cost per person
-- Total cost for all travelers
-"""
+    - Cost per person
+    - Total cost for all travelers
+    """
 
     human_prompt = f"""
     Create a budget breakdown for this travel destination.
@@ -59,5 +57,3 @@ def budget_agent(state: TravelState) -> dict:
     return {
         "budget_breakdown": response.content
     }
-
-
