@@ -1,23 +1,18 @@
 
 from dotenv import load_dotenv
-from typing import TypedDict
 from agents.state import TravelState
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
 import streamlit as st
 
 load_dotenv()
 
-# Groq fallback model
-groq_llm = ChatGroq(
+# Groq model
+llm = ChatGroq(
     model="openai/gpt-oss-120b",
     temperature=0.3,
     api_key=st.secrets["GROQ_API_KEY"]
 )
-
-# Gemini first, Groq if Gemini fails
-llm = gemini_llm.with_fallbacks([groq_llm])
 
 
 def research_agent(state: TravelState) -> dict:
