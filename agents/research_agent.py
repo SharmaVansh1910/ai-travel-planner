@@ -9,12 +9,6 @@ import streamlit as st
 
 load_dotenv()
 
-# Gemini primary model
-gemini_llm = ChatGoogleGenerativeAI(
-    model="gemini-3.8-flash",
-    temperature=0.3
-)
-
 # Groq fallback model
 groq_llm = ChatGroq(
     model="openai/gpt-oss-120b",
