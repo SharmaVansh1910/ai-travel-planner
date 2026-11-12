@@ -5,7 +5,7 @@ from agents.state import TravelState
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 from langchain_core.messages import HumanMessage, SystemMessage
-import os
+import streamlit as st
 
 load_dotenv()
 
@@ -19,7 +19,7 @@ gemini_llm = ChatGoogleGenerativeAI(
 groq_llm = ChatGroq(
     model="openai/gpt-oss-120b",
     temperature=0.3,
-    api_key=os.getenv("GROQ_API_KEY")
+    api_key=st.secrets["GROQ_API_KEY"]
 )
 
 # Gemini first, Groq if Gemini fails
