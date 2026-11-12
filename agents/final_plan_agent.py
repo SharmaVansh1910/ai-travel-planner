@@ -1,16 +1,16 @@
+
 from dotenv import load_dotenv
-
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_core.messages import HumanMessage, SystemMessage
+import streamlit as st
 from agents.state import TravelState
+from langchain_groq import ChatGroq
+from langchain_core.messages import HumanMessage, SystemMessage
 
-# Load environment variables
 load_dotenv()
 
-# Gemini model
-llm = ChatGoogleGenerativeAI(
-    model="gemini-3.5-flash-lite",
-    temperature=0.3
+llm = ChatGroq(
+    model="openai/gpt-oss-120b",
+    temperature=0.3,
+    api_key=st.secrets["GROQ_API_KEY"]
 )
 
 
@@ -56,7 +56,6 @@ def final_plan_agent(state: TravelState) -> dict:
     Format the response EXACTLY like this:
 
     🌍 Travel Plan: [Destination] ([Days] Days, [People] People)
-    ═══════════════════════════════════════
 
     📋 DESTINATION OVERVIEW
     - Include best time to visit
